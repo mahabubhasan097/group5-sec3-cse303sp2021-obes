@@ -1,8 +1,11 @@
+<?php
+    include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>User List | Department</title>
+	<title>Course List | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -90,7 +93,7 @@
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="user-list.html">
 								<i class="fas fa-user-friends"></i>
 								<p>User List</p>
@@ -150,7 +153,7 @@
 								<p>Add Program</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="course-list.php">
 								<i class="fas fa-clipboard"></i>
 								<p>Course List</p>
@@ -174,7 +177,7 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">User List</h2>
+								<h2 class="text-white pb-2 fw-bold">Course List</h2>
 								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
@@ -186,57 +189,40 @@
 							<div class="card">
 								<div class="card-body">
 									<div class="table-responsive">
-										<table id="user-datatables" class="display table table-striped table-hover" >
+										<table id="school-datatables" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Department</th>
-													<th>Joining Date</th>
+													<th>Course ID</th>
+													<th>Course name</th>
+													<th>Program Name</th>
+													<th>Credit</th>
 												</tr>
 											</thead>
 											<tfoot>
 												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Program</th>
-													<th>Joining Date</th>
+													<th>Course ID</th>
+													<th>Course name</th>
+													<th>Program Name</th>
+													<th>Credit</th>
 												</tr>
 											</tfoot>
 											<tbody>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
+												<?php
+													$query = "SELECT * FROM course NATURAL LEFT JOIN (program NATURAL LEFT JOIN department)";
+													$crss = $conn->query($query);
+													foreach($crss as $crs){
+														$id = strtoupper($crs['course_id']);
+														$name = $crs['course_name'];
+														$prog = $crs['program_name']." in ".$crs['department_id'];
+														$credit = $crs['no_credits'];
+														echo "<tr>
+																<td>$id</td>
+																<td>$name</td>
+																<td>$prog</td>
+																<td>$credit</td>
+															</tr>";
+													}
+												?>
 											</tbody>
 										</table>
 									</div>
@@ -296,7 +282,7 @@
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('#user-datatables').DataTable({
+			$('#school-datatables').DataTable({
 			});
 		});
 	</script>

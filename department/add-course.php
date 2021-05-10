@@ -1,13 +1,17 @@
+<?php
+	include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>User List | Department</title>
+	<title>Add Course | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
 	<!-- Fonts and icons -->
 	<script src="../assets/js/plugin/webfont/webfont.min.js"></script>
+	
 	<script>
 		WebFont.load({
 			google: {"families":["Lato:300,400,700,900"]},
@@ -21,6 +25,9 @@
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/atlantis.min.css">
+
+	<!-- Tagify -->
+	<link rel="stylesheet" href="../assets/tagify/tagify.css">
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="../assets/css/demo.css">
@@ -90,7 +97,7 @@
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="user-list.html">
 								<i class="fas fa-user-friends"></i>
 								<p>User List</p>
@@ -156,7 +163,7 @@
 								<p>Course List</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="add-course.php">
 								<i class="fas fa-clipboard-list"></i>
 								<p>Add Course</p>
@@ -174,75 +181,61 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">User List</h2>
+								<h2 class="text-white pb-2 fw-bold">Create Course</h2>
 								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row ">
-						<div class="col-md-12">
+					<div class="row d-flex justify-content-center">
+						<div class="col-8">
 							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Add New Course</h4>
+								</div>
 								<div class="card-body">
-									<div class="table-responsive">
-										<table id="user-datatables" class="display table table-striped table-hover" >
-											<thead>
-												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Department</th>
-													<th>Joining Date</th>
-												</tr>
-											</thead>
-											<tfoot>
-												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Program</th>
-													<th>Joining Date</th>
-												</tr>
-											</tfoot>
-											<tbody>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+									<form method="POST" action="../php/add-course.php">
+										<div class="col-md-12">
+										<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="program_id" required >
+													<?php
+														$query = "SELECT * FROM program";
+														$progs = $conn->query($query);
+														foreach($progs as $prog){
+															$id = $prog['program_id'];
+															$name = $prog['program_name'];
+															$dep = $prog['department_id'];
+															echo "<option value='$id'>$name in $dep</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Department</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="course_id" name="course_id" type="text" class="form-control input-border-bottom" required>
+												<label for="course_id" class="placeholder">Course ID</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="course_name" name="course_name" type="text" class="form-control input-border-bottom" required>
+												<label for="course_name" class="placeholder">Course Title</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="no_credits" name="no_credits" type="number" class="form-control input-border-bottom" required>
+												<label for="no_credits" class="placeholder">Credit</label>
+											</div>
+											<div id="plo-co">
+												
+											</div>
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit"> 
+											</div>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
 			</div>
 			<footer class="footer">
@@ -286,8 +279,18 @@
 	<!-- jQuery Scrollbar -->
 	<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
+	<!-- jQuery Sparkline -->
+	<script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
 	<!-- Datatables -->
 	<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+	<!-- Bootstrap Notify -->
+	<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+	
+	<!-- Tagify -->
+	<script src="../assets/tagify/jQuery.tagify.min.js"></script>
 
 	<!-- Atlantis JS -->
 	<script src="../assets/js/atlantis.min.js"></script>
@@ -295,10 +298,32 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
-		$(document).ready(function() {
-			$('#user-datatables').DataTable({
-			});
+
+		$plo = 13;
+		$( document ).ready(function(){
+			for($i=1; $i<=$plo; $i++){
+				$("#plo-co").append(
+					`<div class="form-group">
+						<label for="plo`+$i+`" class="placeholder">PLO`+$i+`</label>
+						<input id="plo`+$i+`" type="text" class="form-control input-border-bottom plo-map" name="plo`+$i+`">
+					</div>`
+				);
+			}
+
+			$(".plo-map").tagify({
+			enforceWhitelist : true,
+			whitelist : [
+				'CO1', 'CO2', 'CO3', 'CO4', 'CO5', 'CO6', 'CO7', 'CO8', 'CO9', 'CO10', 'CO11', 'CO12', 'CO12',
+			],
+			dropdown : {
+				enabled: 1,
+				maxItems: 5,
+				closeOnSelect: true,
+			}
 		});
+
+		});
+
 	</script>
 </body>
 </html>

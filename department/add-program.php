@@ -1,8 +1,11 @@
+<?php
+	include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>User List | Department</title>
+	<title>Add Department | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -90,7 +93,7 @@
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="user-list.html">
 								<i class="fas fa-user-friends"></i>
 								<p>User List</p>
@@ -144,7 +147,7 @@
 								<p>Program List</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="add-program.php">
 								<i class="fas fa-book-open"></i>
 								<p>Add Program</p>
@@ -174,75 +177,56 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">User List</h2>
+								<h2 class="text-white pb-2 fw-bold">Create Program</h2>
 								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row ">
-						<div class="col-md-12">
+					<div class="row d-flex justify-content-center">
+						<div class="col-8">
 							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Add New Program</h4>
+								</div>
 								<div class="card-body">
-									<div class="table-responsive">
-										<table id="user-datatables" class="display table table-striped table-hover" >
-											<thead>
-												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Department</th>
-													<th>Joining Date</th>
-												</tr>
-											</thead>
-											<tfoot>
-												<tr>
-													<th>ID</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Role</th>
-													<th>Position</th>
-													<th>Program</th>
-													<th>Joining Date</th>
-												</tr>
-											</tfoot>
-											<tbody>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-												<tr>
-													<td>101011</td>
-													<td>John Smith</td>
-													<td>smith@email.com</td>
-													<td>Student</td>
-													<td>null</td>
-													<td>CSE</td>
-													<td>01-04-2021</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+									<form method="POST" action="../php/add-program.php">
+										<div class="col-md-12">
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="department_id" required >
+													<?php
+														$query = "SELECT * FROM department";
+														$deps = $conn->query($query);
+														foreach($deps as $dep){
+															$id = $dep['department_id'];
+															$name = $dep['department_name'];
+															echo "<option value='$id'>$name</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Department</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="program_name" name="program_name" type="text" class="form-control input-border-bottom" required>
+												<label for="program_name" class="placeholder">Program Name</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="plo_total" name="plo_total" type="text" class="form-control input-border-bottom" onchange="generatePlo(event);" required>
+												<label for="plo_total" class="placeholder">Total PLO</label>
+											</div>
+											<div id="plo-inputs">
+												
+											</div>
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit"> 
+											</div>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
 			</div>
 			<footer class="footer">
@@ -286,8 +270,15 @@
 	<!-- jQuery Scrollbar -->
 	<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
+	<!-- jQuery Sparkline -->
+	<script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
 	<!-- Datatables -->
 	<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+
+	<!-- Bootstrap Notify -->
+	<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
 
 	<!-- Atlantis JS -->
 	<script src="../assets/js/atlantis.min.js"></script>
@@ -295,10 +286,17 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
-		$(document).ready(function() {
-			$('#user-datatables').DataTable({
-			});
-		});
+		function generatePlo(event){
+			$("#plo-inputs").empty();
+			for($i=1; $i<=$("#plo_total").val(); $i++){
+				$("#plo-inputs").append(
+					`<div class="form-group form-floating-label">
+						<input id="plo`+$i+`" name="plo`+$i+`" type="text" class="form-control input-border-bottom" required>
+						<label for="plo`+$i+`" class="placeholder">PLO`+$i+` Name</label>
+					</div>`
+				);
+			}
+		}
 	</script>
 </body>
 </html>
