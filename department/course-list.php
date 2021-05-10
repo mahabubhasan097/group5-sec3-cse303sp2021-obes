@@ -94,13 +94,13 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="user-list.html">
+							<a href="user-list.php">
 								<i class="fas fa-user-friends"></i>
 								<p>User List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-user.html">
+							<a href="add-user.php">
 								<i class="fas fa-user-plus"></i>
 								<p>Add User</p>
 							</a>

@@ -1,8 +1,11 @@
+<?php
+    include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>Add Department | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -76,90 +79,48 @@
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Mr. Carter
-									<span class="user-level">Dean | Department</span>
+									Mr. Arter
+									<span class="user-level">Instructor</span>
 								</span>
 							</a>
 							<div class="clearfix"></div>
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="user-list.php">
+							<a href="section-list.php">
 								<i class="fas fa-user-friends"></i>
-								<p>User List</p>
+								<p>Section List</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="add-user.php">
+						<li class="nav-item active">
+							<a href="add-section.php">
 								<i class="fas fa-user-plus"></i>
-								<p>Add User</p>
+								<p>Add Section</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="university-list.php">
-								<i class="fas fa-user-friends"></i>
-								<p>University List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-university.php">
-								<i class="fas fa-user-friends"></i>
-								<p>Add University</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="school-list.php">
-								<i class="fas fa-school"></i>
-								<p>School List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-school.php">
-								<i class="far fa-plus-square"></i>
-								<p>Add School</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="department-list.php">
+							<a href="assessment-list.php">
 								<i class="fas fa-book"></i>
-								<p>Department List</p>
+								<p>Assessment List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-department.php">
+							<a href="add-assessment.php">
 								<i class="fas fa-book-open"></i>
-								<p>Add Department</p>
+								<p>Add Assessment</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="program-list.php">
+							<a href="report.html">
 								<i class="fas fa-book"></i>
-								<p>Program List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-program.php">
-								<i class="fas fa-book-open"></i>
-								<p>Add Program</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="course-list.php">
-								<i class="fas fa-clipboard"></i>
-								<p>Course List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-course.php">
-								<i class="fas fa-clipboard-list"></i>
-								<p>Add Course</p>
+								<p>Reports</p>
 							</a>
 						</li>
 					</ul>
@@ -174,16 +135,56 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">Create Section</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
+					<div class="row d-flex justify-content-center">
+						<div class="col-8">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Add Section</h4>
+								</div>
+								<div class="card-body">
+									<form enctype="multipart/form-data" method="POST" action="../php/add-section.php">
+										<div class="col-md-12">
+											<div class="form-group form-floating-label">
+												<input id="semester" name="semester" type="text" class="form-control input-border-bottom" required>
+												<label for="semester" class="placeholder">Semester</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="section" name="section" type="text" class="form-control input-border-bottom" required>
+												<label for="section" class="placeholder">Section</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="course">
+													<?php
+														$query = "SELECT * FROM course";
+														$crss = $conn->query($query);
+														foreach($crss as $crs){
+															$id = $crs['course_id'];
+															$name = $crs['course_name'];
+															echo "<option value='$id'>$name</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Course</label>
+											</div>
+											<div class="form-group">
+												<label for="exampleFormControlFile1">Enrolled Student</label>
+												<input type="file" class="form-control-file" id="exampleFormControlFile1" name="enroll">
+											</div>
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit" required> 
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

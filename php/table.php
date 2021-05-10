@@ -58,10 +58,10 @@
         faculty_id INT NOT NULL , 
         fname VARCHAR(200) NOT NULL , 
         lname VARCHAR(200) NOT NULL , 
-        gender VARCHAR(10) NOT NULL , 
-        address TEXT NOT NULL , 
-        dateofbirth DATE NOT NULL , 
-        phone VARCHAR(20) NOT NULL , 
+        gender VARCHAR(10) NULL , 
+        address TEXT NULL , 
+        dateofbirth DATE NULL , 
+        phone VARCHAR(20) NULL , 
         email VARCHAR(255) NOT NULL UNIQUE, 
         password VARCHAR(255) NOT NULL , 
         department_id VARCHAR(5) NOT NULL , 
@@ -75,10 +75,10 @@
         student_id INT NOT NULL , 
         fname VARCHAR(200) NOT NULL , 
         lname VARCHAR(200) NOT NULL , 
-        gender VARCHAR(10) NOT NULL , 
-        address TEXT NOT NULL , 
-        dateofbirth DATE NOT NULL , 
-        phone VARCHAR(20) NOT NULL , 
+        gender VARCHAR(10) NULL , 
+        address TEXT NULL , 
+        dateofbirth DATE NULL , 
+        phone VARCHAR(20) NULL , 
         email VARCHAR(255) NOT NULL UNIQUE, 
         password VARCHAR(255) NOT NULL , 
         program_id INT NOT NULL , 
@@ -147,10 +147,9 @@
         assessment_name VARCHAR(50) NOT NULL , 
         marks INT NOT NULL , 
         question_no INT NOT NULL , 
-        co_id INT NOT NULL , student_id INT NOT NULL , 
+        co_number INT NOT NULL , 
         section_id INT NOT NULL , 
         PRIMARY KEY (`assessment_id`) ,
-        FOREIGN KEY (co_id) REFERENCES co(co_id) ,
         FOREIGN KEY (section_id) REFERENCES section (section_id))";
     if(!$conn->query($table)){
         echo "Error creating assessment table <br/>";
@@ -159,11 +158,11 @@
     $table = "CREATE TABLE evaluation ( 
         evaluation_id INT NOT NULL AUTO_INCREMENT , 
         obtained_marks INT NOT NULL , 
-        assessment_id INT NOT NULL , 
-        faculty_id INT NOT NULL , 
+        assessment_id INT NOT NULL ,  
+        enroll_id INT NOT NULL ,
         PRIMARY KEY (`evaluation_id`) ,
         FOREIGN KEY (assessment_id) REFERENCES assessment (assessment_id) ,
-        FOREIGN KEY (faculty_id) REFERENCES faculty (faculty_id))";
+        FOREIGN KEY (enroll_id) REFERENCES enrollment (enroll_id))";
     if(!$conn->query($table)){
         echo "Error creating evaluation table <br/>";
     }

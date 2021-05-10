@@ -1,8 +1,11 @@
+<?php
+    include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>Create User | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -84,7 +87,7 @@
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
@@ -96,7 +99,7 @@
 								<p>User List</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="add-user.php">
 								<i class="fas fa-user-plus"></i>
 								<p>Add User</p>
@@ -162,6 +165,7 @@
 								<p>Add Course</p>
 							</a>
 						</li>
+						
 					</ul>
 				</div>
 			</div>
@@ -174,16 +178,85 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">Create User</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
+					<div class="row d-flex justify-content-center">
+						<div class="col-8">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Add New User</h4>
+								</div>
+								<div class="card-body">
+									<form method="POST" action="../php/add-user.php">
+										<div class="col-md-12">
+											<div class="form-group form-floating-label">
+												<input id="id" name="id" type="text" class="form-control input-border-bottom" required>
+												<label for="id" class="placeholder">ID</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="f-name" name="f_name" type="text" class="form-control input-border-bottom" required>
+												<label for="f-name" class="placeholder">First Name</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="l-name" name="l_name" type="text" class="form-control input-border-bottom" required>
+												<label for="l-name" class="placeholder">Last Name</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="email" name="email" type="email" class="form-control input-border-bottom" required>
+												<label for="email" class="placeholder">Email</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="password" name="password" type="password" class="form-control input-border-bottom" required>
+												<label for="password" class="placeholder">Password</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" required name="role">
+													<option value="student">Student</option>
+													<option value="faculty">Faculty</option>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Role</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="program">
+													<?php
+														$query = "SELECT * FROM program";
+														$prgrms = $conn->query($query);
+														foreach($prgrms as $prgrm){
+															$id = $prgrm['program_id'];
+															$name = $prgrm['program_name'];
+															$dep = $prgrm['department_id'];
+															echo "<option value='$id'>$name in $dep</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Program</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="department">
+													<?php
+														$query = "SELECT * FROM department";
+														$deps = $conn->query($query);
+														foreach($deps as $dep){
+															$id = $dep['department_id'];
+															echo "<option value='$id'>$id</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Program</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit"> 
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

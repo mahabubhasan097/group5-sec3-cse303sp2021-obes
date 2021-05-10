@@ -1,8 +1,11 @@
+<?php
+    include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>User List | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -84,13 +87,13 @@
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="user-list.php">
 								<i class="fas fa-user-friends"></i>
 								<p>User List</p>
@@ -174,17 +177,77 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">User List</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
-					</div>
+					<div class="row ">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="table-responsive">
+										<table id="user-datatables" class="display table table-striped table-hover" >
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>Email</th>
+													<th>Role</th>
+													<th>Department/Program</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>Email</th>
+													<th>Role</th>
+													<th>Department/Program</th>
+												</tr>
+											</tfoot>
+											<tbody>
+												<?php
+													$query = "SELECT * FROM faculty";
+													$users = $conn->query($query);
+													foreach($users as $user){
+														$id = $user['faculty_id'];
+														$name = $user['fname'] . ' ' . $user['lname'];
+														$email = $user['email'];
+														$deprog = $user['department_id'];
+														echo "<tr>
+																<td>$id</td>
+																<td>$name</td>
+																<td>$email</td>
+																<td>Faculty</td>
+																<td>$deprog</td>
+															</tr>";
+													}
+													$query = "SELECT * FROM student NATURAL LEFT JOIN program";
+													$users = $conn->query($query);
+													foreach($users as $user){
+														$id = $user['student_id'];
+														$name = $user['fname'] . ' ' . $user['lname'];
+														$email = $user['email'];
+														$deprog = $user['program_name'] . ' in ' . $user['department_id'];
+														echo "<tr>
+																<td>$id</td>
+																<td>$name</td>
+																<td>$email</td>
+																<td>Student</td>
+																<td>$deprog</td>
+															</tr>";
+													}
+
+												?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
 			</div>
 			<footer class="footer">
@@ -228,15 +291,8 @@
 	<!-- jQuery Scrollbar -->
 	<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-	<!-- jQuery Sparkline -->
-	<script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
 	<!-- Datatables -->
 	<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-
-	<!-- Bootstrap Notify -->
-	<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
 
 	<!-- Atlantis JS -->
 	<script src="../assets/js/atlantis.min.js"></script>
@@ -244,7 +300,10 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
-		
+		$(document).ready(function() {
+			$('#user-datatables').DataTable({
+			});
+		});
 	</script>
 </body>
 </html>

@@ -1,8 +1,14 @@
+<?php
+    include '../php/mysql.php';
+	if(!isset($_GET['section'])){
+		header("Location: section-list.php");
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>Add Department | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -76,90 +82,48 @@
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Mr. Carter
-									<span class="user-level">Dean | Department</span>
+									Mr. Arter
+									<span class="user-level">Instructor</span>
 								</span>
 							</a>
 							<div class="clearfix"></div>
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="user-list.php">
+							<a href="section-list.php">
 								<i class="fas fa-user-friends"></i>
-								<p>User List</p>
+								<p>Section List</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="add-user.php">
+						<li class="nav-item active">
+							<a href="add-section.php">
 								<i class="fas fa-user-plus"></i>
-								<p>Add User</p>
+								<p>Add Section</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="university-list.php">
-								<i class="fas fa-user-friends"></i>
-								<p>University List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-university.php">
-								<i class="fas fa-user-friends"></i>
-								<p>Add University</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="school-list.php">
-								<i class="fas fa-school"></i>
-								<p>School List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-school.php">
-								<i class="far fa-plus-square"></i>
-								<p>Add School</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="department-list.php">
+							<a href="assessment-list.php">
 								<i class="fas fa-book"></i>
-								<p>Department List</p>
+								<p>Assessment List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-department.php">
+							<a href="add-assessment.php">
 								<i class="fas fa-book-open"></i>
-								<p>Add Department</p>
+								<p>Add Assessment</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="program-list.php">
+							<a href="report.html">
 								<i class="fas fa-book"></i>
-								<p>Program List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-program.php">
-								<i class="fas fa-book-open"></i>
-								<p>Add Program</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="course-list.php">
-								<i class="fas fa-clipboard"></i>
-								<p>Course List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-course.php">
-								<i class="fas fa-clipboard-list"></i>
-								<p>Add Course</p>
+								<p>Reports</p>
 							</a>
 						</li>
 					</ul>
@@ -174,16 +138,82 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">Edit Section Mapping</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
+					<div class="row d-flex justify-content-center">
+						<div class="col-10">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Edit Mapping</h4>
+								</div>
+								<div class="card-body">
+									<form method="POST" action="../php/edit-map.php">
+										<div class="col-md-12">
+										<div class="table-responsive">
+										<table id="school-datatables" class="display table table-striped table-hover" >
+											<?php
+												$section = $_GET['section'];
+												$query = "SELECT course_id FROM section WHERE section_id = $section";
+												echo "<input type='hidden' name='section' value='$section'>";
+												$course = $conn->query($query)->fetch_row()[0];
+												$query = "SELECT program_id FROM course WHERE course_id = '$course'";
+												$program = $conn->query($query)->fetch_row()[0];
+												echo "<input type='hidden' name='program' value='$program'>";
+												$query = "SELECT  COUNT(program_id) as plos FROM plo WHERE program_id = $program GROUP BY program_id";
+												$plos = $conn->query($query)->fetch_row()[0];
+												echo "<input type='hidden' name='plos' value='$plos'>";
+												$query = "SELECT COUNT(DISTINCT(co.co_num)) as 'cos' FROM plo LEFT JOIN co ON plo.plo_id = co.plo_id WHERE plo.program_id = $program";
+												$cos = $conn->query($query)->fetch_row()[0];
+												echo "<thead>
+														<tr>
+															<th>PLO</th>";
+												for($i=1; $i<=$cos; $i++){
+													echo "<th>CO$i</th>";
+												}
+												echo "	</tr>
+													</thead>
+													<tfoot>
+														<tr>
+															<th>PLO</th>";
+												for($i=1; $i<=$cos; $i++){
+													echo "<th>CO$i</th>";
+												}
+												echo "</tr>
+												</tfoot>";
+												echo "<tbody>";
+												for($plo=1; $plo<=$plos; $plo++){
+													echo "<tr>
+													<td>PLO$plo</td>";
+													for($co=1; $co<=$cos; $co++){
+														$query = "SELECT plo_id FROM plo WHERE program_id = $program AND plo_num=$plo";
+														$plo_id = $conn->query($query)->fetch_row()[0];
+														$query = "SELECT co_id FROM co WHERE co_num = $co AND plo_id = $plo_id";
+														if($conn->query($query)->num_rows != 0){
+															echo "<td><input type='checkbox' name='plo".$plo."[]' value='$co' checked></td>";
+														}else{
+															echo "<td><input type='checkbox' name='plo".$plo."[]' value='$co'></td>";
+														}
+													}
+													echo "</tr>";
+												}
+												echo "</tbody>";
+											?>
+										</table>
+									</div>
+											
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit"> 
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

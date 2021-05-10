@@ -1,8 +1,11 @@
+<?php
+    include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>Department List | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -76,90 +79,48 @@
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Mr. Carter
-									<span class="user-level">Dean | Department</span>
+									Mr. Arter
+									<span class="user-level">Instructor</span>
 								</span>
 							</a>
 							<div class="clearfix"></div>
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="user-list.php">
+							<a href="section-list.php">
 								<i class="fas fa-user-friends"></i>
-								<p>User List</p>
+								<p>Section List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-user.php">
+							<a href="add-section.php">
 								<i class="fas fa-user-plus"></i>
-								<p>Add User</p>
+								<p>Add Section</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="university-list.php">
-								<i class="fas fa-user-friends"></i>
-								<p>University List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-university.php">
-								<i class="fas fa-user-friends"></i>
-								<p>Add University</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="school-list.php">
-								<i class="fas fa-school"></i>
-								<p>School List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-school.php">
-								<i class="far fa-plus-square"></i>
-								<p>Add School</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="department-list.php">
+						<li class="nav-item active">
+							<a href="assessment-list.php">
 								<i class="fas fa-book"></i>
-								<p>Department List</p>
+								<p>Assessment List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-department.php">
+							<a href="add-assessment.php">
 								<i class="fas fa-book-open"></i>
-								<p>Add Department</p>
+								<p>Add Assessment</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="program-list.php">
+							<a href="report.html">
 								<i class="fas fa-book"></i>
-								<p>Program List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-program.php">
-								<i class="fas fa-book-open"></i>
-								<p>Add Program</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="course-list.php">
-								<i class="fas fa-clipboard"></i>
-								<p>Course List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-course.php">
-								<i class="fas fa-clipboard-list"></i>
-								<p>Add Course</p>
+								<p>Reports</p>
 							</a>
 						</li>
 					</ul>
@@ -174,17 +135,62 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">Department List</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
-					</div>
+					<div class="row ">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="table-responsive">
+										<table id="school-datatables" class="display table table-striped table-hover" >
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Section No</th>
+													<th>Semester</th>
+													<th>Course Id</th>
+													<th>Total Question</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>#</th>
+													<th>Section No</th>
+													<th>Semester</th>
+													<th>Course Id</th>
+													<th>Total Questions</th>
+												</tr>
+											</tfoot>
+											<tbody>
+												<?php
+													$query = "SELECT *, COUNT(question_no) as 'ques' FROM assessment NATURAL LEFT JOIN section GROUP BY section_id, assessment.assessment_name";
+													$asmnts = $conn->query($query);
+													foreach($asmnts as $asmnt){
+														$id = $asmnt['assessment_id'];
+														$section = strtoupper($asmnt['section_no']);
+														$semester = ucfirst($asmnt['semester']);
+														$course = strtoupper($asmnt['course_id']);
+														$ques = $asmnt['ques'];
+														echo "<tr>
+																<td>$id</td>
+																<td>$section</td>
+																<td>$semester</td>
+																<td>$course</td>
+																<td>$ques</td>
+															</tr>";
+													}
+												?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
 			</div>
 			<footer class="footer">
@@ -228,15 +234,8 @@
 	<!-- jQuery Scrollbar -->
 	<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-	<!-- jQuery Sparkline -->
-	<script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
 	<!-- Datatables -->
 	<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-
-	<!-- Bootstrap Notify -->
-	<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
 
 	<!-- Atlantis JS -->
 	<script src="../assets/js/atlantis.min.js"></script>
@@ -244,7 +243,10 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
-		
+		$(document).ready(function() {
+			$('#school-datatables').DataTable({
+			});
+		});
 	</script>
 </body>
 </html>

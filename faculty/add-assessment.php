@@ -1,8 +1,11 @@
+<?php
+	include '../php/mysql.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard | Department</title>
+	<title>Add Department | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -76,90 +79,48 @@
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Mr. Carter
-									<span class="user-level">Dean | Department</span>
+									Mr. Arter
+									<span class="user-level">Instructor</span>
 								</span>
 							</a>
 							<div class="clearfix"></div>
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="index.html">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="user-list.php">
+							<a href="section-list.php">
 								<i class="fas fa-user-friends"></i>
-								<p>User List</p>
+								<p>Section List</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="add-user.php">
+							<a href="add-section.php">
 								<i class="fas fa-user-plus"></i>
-								<p>Add User</p>
+								<p>Add Section</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="university-list.php">
-								<i class="fas fa-user-friends"></i>
-								<p>University List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-university.php">
-								<i class="fas fa-user-friends"></i>
-								<p>Add University</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="school-list.php">
-								<i class="fas fa-school"></i>
-								<p>School List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-school.php">
-								<i class="far fa-plus-square"></i>
-								<p>Add School</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="department-list.php">
+							<a href="assessment-list.php">
 								<i class="fas fa-book"></i>
-								<p>Department List</p>
+								<p>Assessment List</p>
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="add-department.php">
+						<li class="nav-item active">
+							<a href="add-assessment.php">
 								<i class="fas fa-book-open"></i>
-								<p>Add Department</p>
+								<p>Add Assessment</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="program-list.php">
+							<a href="report.html">
 								<i class="fas fa-book"></i>
-								<p>Program List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-program.php">
-								<i class="fas fa-book-open"></i>
-								<p>Add Program</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="course-list.php">
-								<i class="fas fa-clipboard"></i>
-								<p>Course List</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="add-course.php">
-								<i class="fas fa-clipboard-list"></i>
-								<p>Add Course</p>
+								<p>Reports</p>
 							</a>
 						</li>
 					</ul>
@@ -174,16 +135,68 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
-								<h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5>
+								<h2 class="text-white pb-2 fw-bold">Create Department</h2>
+								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row mt--2">
-						
-						
+					<div class="row d-flex justify-content-center">
+						<div class="col-8">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Add New Department</h4>
+								</div>
+								<div class="card-body">
+									<form method="POST" action="../php/add-assessment.php">
+										<div class="col-md-12">
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="section" required>
+													<?php
+														$query = "SELECT * FROM section";
+														$sctns = $conn->query($query);
+														foreach($sctns as $sctn){
+															$id = $sctn['section_id'];
+															$section = ucfirst($sctn['semester']) . " - " . strtoupper($sctn['course_id']) . " - " . strtoupper($sctn['section_no']);
+															echo "<option value='$id'>$section</option>";
+														}
+													?>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Section</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="name" required>
+													<option value="mid">Mid</option>
+													<option value="mid">Final</option>
+													<option value="mid">Project</option>
+												</select>
+												<label for="selectFloatingLabel" class="placeholder">Assessment Name</label>
+											</div>
+											<div class="form-group form-floating-label">
+												<input id="ques" name="ques" type="text" class="form-control input-border-bottom" onchange="makeList();" required>
+												<label for="ques" class="placeholder">Total Questions</label>
+											</div>
+											<div id="qs-here">
+												<!-- <div class="form-row">
+													<div class="form-group form-floating-label col-6">
+														<input id="mark1" name="mark1" type="text" class="form-control input-border-bottom" required>
+														<label for="mark1" class="placeholder">Question 1 Marks</label>
+													</div>
+													<div class="form-group form-floating-label col-6">
+														<input id="co1" name="co1" type="text" class="form-control input-border-bottom" required>
+														<label for="co1" class="placeholder">Question 1 CO</label>
+													</div>
+												</div> -->
+											</div>
+											<div class="form-group form-floating-label">
+												<input type="submit" class="btn btn-primary" value="Submit"> 
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -244,7 +257,22 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
 	<script>
-		
+		function makeList(){
+			$ques = $("#ques").val();
+			$("#qs-here").empty();
+			for($q=1; $q<=$ques; $q++){
+				$("#qs-here").append(`<div class="form-row">
+										<div class="form-group form-floating-label col-6">
+											<input id="mark`+$q+`" name="mark`+$q+`" type="text" class="form-control input-border-bottom" required>
+											<label for="mark`+$q+`" class="placeholder">Question `+$q+` Marks</label>
+										</div>
+										<div class="form-group form-floating-label col-6">
+											<input id="co`+$q+`" name="co`+$q+`" type="text" class="form-control input-border-bottom" required>
+											<label for="co`+$q+`" class="placeholder">Question `+$q+` CO</label>
+										</div>
+									</div>`);
+			}
+		}
 	</script>
 </body>
 </html>
