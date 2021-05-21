@@ -34,7 +34,7 @@
 			<!-- Logo Header -->
 			<div class="logo-header" data-background-color="blue">
 				
-				<a href="index.html" class="logo">
+				<a href="index.php" class="logo">
 					<h1 class="text-white mt-2 ml-3">OBES</h1>
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						
 						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link" href="#">
+							<a class="nav-link" href="../php/login.php?logout=1">
 								<i class="icon icon-logout"></i> Logout
 							</a>
 						</li>
@@ -88,7 +88,7 @@
 					</div>
 					<ul class="nav nav-primary">
 						<li class="nav-item">
-							<a href="index.html">
+							<a href="index.php">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
@@ -118,7 +118,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="report.html">
+							<a href="report.php">
 								<i class="fas fa-book"></i>
 								<p>Reports</p>
 							</a>
@@ -168,8 +168,8 @@
 											<div class="form-group form-floating-label">
 												<select class="form-control input-border-bottom" id="selectFloatingLabel" name="name" required>
 													<option value="mid">Mid</option>
-													<option value="mid">Final</option>
-													<option value="mid">Project</option>
+													<option value="final">Final</option>
+													<option value="project">Project</option>
 												</select>
 												<label for="selectFloatingLabel" class="placeholder">Assessment Name</label>
 											</div>

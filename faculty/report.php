@@ -1,11 +1,15 @@
 <?php
     include '../php/mysql.php';
+    session_start();
+    $id = $_SESSION['id'];
+    $query = "SELECT UPPER(course_id) as 'course', SUM(marks) as 'marks', COUNT(marks)*100 as 'student' FROM (SELECT school_name, department_id, program_name,  semester, faculty, course_id, no_credits, student_id, SUM(marks) as 'marks' FROM (SELECT school.school_name, department.department_id, program.program_name, section.semester, CONCAT(faculty.fname, ' ', faculty.lname) as 'faculty', course.course_id, course.no_credits, enrollment.student_id, IF(assessment.assessment_name = 'final', (SUM(evaluation.obtained_marks) / SUM(assessment.marks)) * 40, (SUM(evaluation.obtained_marks) / SUM(assessment.marks)) * 30) as 'marks', assessment.assessment_name FROM school NATURAL LEFT JOIN department NATURAL LEFT JOIN program NATURAL LEFT JOIN course NATURAL LEFT JOIN section NATURAL LEFT JOIN assessment NATURAL LEFT JOIN evaluation NATURAL LEFT JOIN faculty LEFT JOIN co ON assessment.co_number = co.co_num AND section.section_id = co.section_id LEFT JOIN plo on co.plo_id = plo.plo_id LEFT JOIN enrollment ON enrollment.enroll_id = evaluation.enroll_id WHERE section.faculty_id = $id GROUP BY course.course_id, enrollment.student_id, assessment.assessment_name, course.course_id) as subQuery GROUP BY semester, student_id, course_id) as query2 GROUP BY course";
+    $data = $conn->query($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Add Department | Department</title>
+	<title>Department List | Department</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<!-- <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon"/> -->
 
@@ -99,7 +103,7 @@
 								<p>Section List</p>
 							</a>
 						</li>
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a href="add-section.php">
 								<i class="fas fa-user-plus"></i>
 								<p>Add Section</p>
@@ -117,7 +121,7 @@
 								<p>Add Assessment</p>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a href="report.php">
 								<i class="fas fa-book"></i>
 								<p>Reports</p>
@@ -135,43 +139,28 @@
 					<div class="page-inner py-5">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white pb-2 fw-bold">Create Section</h2>
-								<h5 class="text-white op-7 mb-2">An outcome based education system.</h5>
+								<h2 class="text-white pb-2 fw-bold">Report</h2>
+								<!-- <h5 class="text-white op-7 mb-2">An outcome based education system.</h5> -->
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner mt--5">
-					<div class="row d-flex justify-content-center">
-						<div class="col-8">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">Add Section</h4>
-								</div>
-								<div class="card-body">
-									<form enctype="multipart/form-data" method="POST" action="../php/add-evaluation.php">
-										<div class="col-md-12">
-											<?php
-												$sctn = $_GET['section'];
-												$name = $_GET['name'];
-												$ques = $_GET['ques'];
-												echo "<input type='hidden' name='section' value='$sctn'>";
-												echo "<input type='hidden' name='name' value='$name'>";
-												echo "<input type='hidden' name='ques' value='$ques'>";
-											?>
-											<div class="form-group">
-												<label for="exampleFormControlFile1">Evaluated Marks</label>
-												<input type="file" class="form-control-file" id="exampleFormControlFile1" name="evaluation">
-											</div>
-											<div class="form-group form-floating-label">
-												<input type="submit" class="btn btn-primary" value="Submit" required> 
-											</div>
+                    <div class='col-12'>
+                        <div class="card full-height">
+							<div class="card-body">
+								<div class="card-title">Course Wise Trend</div>
+								<div class="row py-3">
+									<div class="col-md-12">
+										<div id="chart-container">
+											<div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+											<canvas id="course-wise-trend" style="display: block; height: 80px;" class="chartjs-render-monitor"></canvas>
 										</div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+                    </div>
 				</div>
 			</div>
 			<footer class="footer">
@@ -215,23 +204,59 @@
 	<!-- jQuery Scrollbar -->
 	<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-	<!-- jQuery Sparkline -->
-	<script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
 	<!-- Datatables -->
 	<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
 
-	<!-- Bootstrap Notify -->
-	<script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-
 	<!-- Atlantis JS -->
 	<script src="../assets/js/atlantis.min.js"></script>
+	<script src="../assets/js/plugin/chart.js/chart.min.js"></script>
 
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="../assets/js/setting-demo.js"></script>
+
+    <?php
+        
+    ?>
+
 	<script>
-		
+		var barChart1 = document.getElementById('course-wise-trend').getContext('2d');
+		var myBarChart1 = new Chart(barChart1, {
+			type: 'bar',
+			data: {
+				labels: [
+					<?php
+						foreach($data as $d){
+							$crs = $d['course'];
+							echo "'$crs', ";
+						}
+					?>
+				],
+				datasets : [{
+					label: "Trend",
+					backgroundColor: 'rgba(23, 125, 255, 0.6)',
+					borderColor: 'rgb(23, 125, 255)',
+					data: [
+						<?php
+							foreach($data as $d){
+								$r = round($d['marks'] / $d['student'] * 100, 2);
+								echo $r.", ";
+							}
+						?>
+					],
+				}],
+			},
+			options: {
+				
+				maintainAspectRatio: true,
+				scales: {
+					yAxes: [{
+						ticks: {
+							
+						}
+					}]
+				},
+			}
+		});
 	</script>
 </body>
 </html>
