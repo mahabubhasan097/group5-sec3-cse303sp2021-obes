@@ -4,7 +4,7 @@
     $id = $_SESSION['id'];
     $query = "SELECT course, COUNT(stat) as 'passed' FROM (SELECT UPPER(section.course_id) as 'course', section.faculty_id as 'faculty',  plo.plo_num as 'plo', IF(SUM(evaluation.obtained_marks)/SUM(assessment.marks)>=0.40, 1, 0) AS 'stat' FROM section NATURAL LEFT JOIN assessment NATURAL LEFT JOIN evaluation NATURAL LEFT JOIN enrollment LEFT JOIN co ON assessment.co_number = co.co_num AND assessment.section_id = co.section_id LEFT JOIN PLO ON co.plo_id = plo.plo_id WHERE enrollment.student_id = $id GROUP BY section.course_id, enrollment.student_id, section.course_id, plo.plo_num) as sQuery WHERE stat = 1 GROUP BY course ORDER BY course";
     $pls = $conn->query($query);
-	$query = "SELECT course, COUNT(stat) as 'passed' FROM (SELECT UPPER(section.course_id) as 'course', section.faculty_id as 'faculty',  plo.plo_num as 'plo', IF(SUM(evaluation.obtained_marks)/SUM(assessment.marks)>=0.40, 1, 0) AS 'stat' FROM section NATURAL LEFT JOIN assessment NATURAL LEFT JOIN evaluation NATURAL LEFT JOIN enrollment LEFT JOIN co ON assessment.co_number = co.co_num AND assessment.section_id = co.section_id LEFT JOIN PLO ON co.plo_id = plo.plo_id WHERE enrollment.student_id = $id GROUP BY section.course_id, enrollment.student_id, section.course_id, plo.plo_num) as sQuery WHERE stat = 0 GROUP BY course ORDER BY course";
+	$query = "SELECT course, COUNT(stat) as 'failed' FROM (SELECT UPPER(section.course_id) as 'course', section.faculty_id as 'faculty',  plo.plo_num as 'plo', IF(SUM(evaluation.obtained_marks)/SUM(assessment.marks)>=0.40, 1, 0) AS 'stat' FROM section NATURAL LEFT JOIN assessment NATURAL LEFT JOIN evaluation NATURAL LEFT JOIN enrollment LEFT JOIN co ON assessment.co_number = co.co_num AND assessment.section_id = co.section_id LEFT JOIN PLO ON co.plo_id = plo.plo_id WHERE enrollment.student_id = $id GROUP BY section.course_id, enrollment.student_id, section.course_id, plo.plo_num) as sQuery WHERE stat = 0 GROUP BY course ORDER BY course";
     $mns = $conn->query($query);
 ?>
 <!DOCTYPE html>
@@ -228,7 +228,7 @@
 					data: [
 						<?php
 							foreach($mns as $d){
-								echo $d['passed'].", ";
+								echo $d['failed'].", ";
 							}
 						?>
 					],
