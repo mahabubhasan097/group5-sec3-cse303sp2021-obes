@@ -34,7 +34,7 @@
 			<!-- Logo Header -->
 			<div class="logo-header" data-background-color="blue">
 				
-				<a href="index.html" class="logo">
+				<a href="index.php" class="logo">
 					<h1 class="text-white mt-2 ml-3">OBES</h1>
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						
 						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link" href="#">
+							<a class="nav-link" href="../php/login.php?logout=1">
 								<i class="icon icon-logout"></i> Logout
 							</a>
 						</li>
@@ -88,10 +88,36 @@
 					</div>
 					<ul class="nav nav-primary">
 						<li class="nav-item">
-							<a href="index.html">
+							<a href="index.php">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
+						</li>
+						<li class="nav-item">
+							<a data-toggle="collapse" href="#base" class="collapsed" aria-expanded="false">
+								<i class="fas fa-layer-group"></i>
+								<p>Reports</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="base">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="report1.php">
+											<span class="sub-item">Report1</span>
+										</a>
+									</li>
+									<li>
+										<a href="report2.php">
+											<span class="sub-item">Report2</span>
+										</a>
+									</li>
+									<li>
+										<a href="report3.php">
+											<span class="sub-item">Report3</span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</li>
 						<li class="nav-item active">
 							<a href="user-list.php">
