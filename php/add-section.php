@@ -1,7 +1,9 @@
 <?php
     include 'mysql.php';
 
-    $faculty = 123456;
+    session_start();
+
+    $faculty = $_SESSION['id'];
     
     $semester = strtolower($_POST['semester']);
     $year = substr($semester, -4);
