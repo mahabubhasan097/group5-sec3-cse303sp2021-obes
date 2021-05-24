@@ -46,7 +46,8 @@
 			$query = "SELECT school, department, program, plo, COUNT(plo) as 'stat' FROM (SELECT school.school_name as 'school', program.department_id as 'department', program.program_name as 'program', plo.plo_num as 'plo', IF(SUM(evaluation.obtained_marks)/SUM(assessment.marks)>=0.40, 1, 0) AS 'stat' FROM school NATURAL LEFT JOIN department NATURAL LEFT JOIN program NATURAL LEFT JOIN course NATURAL LEFT JOIN section NATURAL LEFT JOIN assessment NATURAL LEFT JOIN evaluation NATURAL LEFT JOIN enrollment LEFT JOIN co ON assessment.co_number = co.co_num AND assessment.section_id = co.section_id LEFT JOIN PLO ON co.plo_id = plo.plo_id WHERE course.course_id LIKE '%$course%' GROUP BY enrollment.student_id, section.course_id, plo.plo_num ORDER BY stat DESC, plo ASC) as testQ GROUP BY plo";
 			$attempted = $conn->query($query);
 		}
-		
+
+		echo $query;		
 
 		$p_stat = array();
 		foreach($attempted as $a){
